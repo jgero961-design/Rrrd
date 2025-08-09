@@ -76,6 +76,8 @@ app.post('/api/generate', async (req, res) => {
       console.warn('PUBLIC_BASE_URL is not set; Suno API may reject request due to missing callBackUrl');
     }
 
+    console.log('Generating with params:', { mood: mood || null, model, instrumental, callBackUrl, prompt: prompt.slice(0, 80) });
+
     // Send form-encoded as Suno expects callBackUrl
     const formBody = qs.stringify({
       prompt,
@@ -103,7 +105,7 @@ app.post('/api/generate', async (req, res) => {
 
     if (!taskId) {
       console.error('Suno generate unexpected:', { status: formResp.status, data });
-      return res.status(502).json({ error: 'Unexpected response from Suno API', status: formResp.status, details: data });
+      return res.status(502).json({ error: 'Unexpected response from Suno API', status: formResp.status, details: data, attemptedCallBackUrl: callBackUrl });
     }
 
     res.json({ taskId });

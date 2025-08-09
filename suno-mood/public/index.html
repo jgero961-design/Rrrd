@@ -105,8 +105,16 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mood, prompt: prompt || undefined })
       });
-      if (!res.ok) throw new Error('Failed to start generation');
+      if (!res.ok) {
+        const txt = await res.text().catch(()=> '');
+        log('Proxy error: ' + (txt || res.status));
+        throw new Error('Failed to start generation');
+      }
       const data = await res.json();
+      if (!data.taskId) {
+        log('Proxy unexpected response: ' + JSON.stringify(data));
+        throw new Error('Failed to start generation');
+      }
       return data.taskId;
     }
 
