@@ -1,61 +1,82 @@
 <!doctype html>
-<html lang="en">
+<html lang="ka">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Container House Investment — Documentation</title>
-  <meta name="description" content="Professional documentation for a modular container housing investment project in Tbilisi, Georgia." />
-  <meta property="og:title" content="Container House Investment — Documentation" />
-  <meta property="og:description" content="12-unit modular container housing project with garages, yards, and rooftop verandas; full financials and layouts." />
+  <title>კონტეინერის სახლების ინვესტიცია — დოკუმენტაცია</title>
+  <meta name="description" content="თბილისში 58×19მ მიწაზე 12 ერთეული კონტეინერის სახლების პროექტი — გეგმა, ფინანსები, ინვესტიცია, ოპერაციები." />
+  <meta property="og:title" content="კონტეინერის სახლების ინვესტიცია — დოკუმენტაცია" />
+  <meta property="og:description" content="ავტოფარეხით, ეზოთი და სახურავის ვერანდით — სრული გეგმა და ფინანსური მოდელი." />
   <link rel="stylesheet" href="/assets/css/styles.css" />
 </head>
 <body>
   <nav class="navbar">
     <div class="container inner">
-      <div class="brand"><div class="logo"></div> Container House Investment</div>
-      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <div class="brand"><div class="logo"></div> კონტეინერის სახლების ინვესტიცია</div>
+      <button class="nav-toggle" aria-label="მენიუ" aria-expanded="false">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
       </button>
       <div class="navlinks">
-        <a href="/index.html">Overview</a>
-        <a href="/layout.html">Site Layout</a>
-        <a href="/units.html">Units</a>
-        <a href="/financials.html">Financials</a>
-        <a href="/investment.html">Investment</a>
-        <a href="/operations.html">Operations</a>
-        <a href="/downloads.html">Downloads</a>
+        <a href="/index.html">მთავარი</a>
+        <a href="/layout.html">საიტის გეგმა</a>
+        <a href="/units.html">ერთეულები</a>
+        <a href="/financials.html">ფინანსები</a>
+        <a href="/investment.html">ინვესტიცია</a>
+        <a href="/operations.html">ოპერაციები</a>
+        <a href="/downloads.html">ჩამოტვირთვები</a>
       </div>
     </div>
   </nav>
 
   <header class="hero">
     <div class="container">
-      <span class="badge">Tbilisi, Georgia • 58 m × 19 m</span>
-      <h1>12-unit modular container housing with garages, private yards, and rooftop verandas</h1>
-      <p class="lead">Investor-ready documentation: layout, unit structure, financial model, ownership, and operations.</p>
+      <span class="badge">თბილისი, საქართველო • 58 მ × 19 მ</span>
+      <h1>12 ერთეული — ავტოფარეხი, კერძო ეზო და სახურავის ვერანდა</h1>
+      <p class="lead">სრული დოკუმენტაცია ინვესტორებისთვის: გეგმა, ერთეულების აღწერა, ფინანსური მოდელი, მფლობელობა და ოპერაციები.</p>
       <div style="margin-top:var(--space-3); display:flex; gap:.6rem; flex-wrap:wrap;">
-        <a class="btn" href="/financials.html">View Financials</a>
-        <a class="btn secondary" href="/layout.html">See Site Layout</a>
+        <a class="btn" href="/financials.html">ფინანსური მოდელი</a>
+        <a class="btn secondary" href="/layout.html">საიტის გეგმის ნახვა</a>
       </div>
     </div>
   </header>
 
   <main class="container section">
+    <div class="card" style="margin-bottom:var(--space-6);">
+      <h3>აირჩიეთ სახლი — ქირაობა ან ინვესტიცია</h3>
+      <p class="small">ქვემოთ წარმოდგენილ სქემაზე დააკლიკეთ ერთეულზე, რომ იხილოთ დეტალები. შეგიძლიათ გააფილტროთ მხოლოდ ქირავდება ან მხოლოდ გაყიდვაშია.</p>
+      <div style="display:flex; gap:var(--space-3); flex-wrap:wrap; align-items:center; margin-bottom:var(--space-3);">
+        <label style="display:flex; align-items:center; gap:.4rem;"><input type="checkbox" id="filter-rent" checked /> <span>ქირავდება</span></label>
+        <label style="display:flex; align-items:center; gap:.4rem;"><input type="checkbox" id="filter-sale" checked /> <span>გაყიდვაშია</span></label>
+      </div>
+      <div class="grid two" style="align-items:start;">
+        <div class="card" style="padding:0; overflow:hidden;">
+          <canvas id="site-canvas" style="display:block; width:100%; height:auto;"></canvas>
+        </div>
+        <div class="card">
+          <h3 id="unit-name">აირჩიეთ ერთეული</h3>
+          <div id="unit-tags" style="display:flex; gap:.4rem; flex-wrap:wrap; margin:.25rem 0 .5rem;"></div>
+          <p id="unit-desc" class="small">დააკლიკეთ სქემაზე ერთეულზე დეტალებისთვის.</p>
+          <div id="unit-actions" style="margin-top:var(--space-3); display:flex; gap:.6rem; flex-wrap:wrap;"></div>
+        </div>
+      </div>
+      <p class="small" style="margin-top:var(--space-3); color:var(--muted);">ლეგენდა: მწვანე — ქირავდება; ნარინჯისფერი — გაყიდვაშია; იისფერი — ორივე.</p>
+    </div>
+
     <div class="grid auto">
       <div class="card">
-        <h3>Project Overview</h3>
-        <p>Two rows of six duplexes (12 total units) with a central driveway. Each unit features a garage, living space, private yard, and a rooftop veranda.</p>
-        <div class="kpi"><span>Units</span><span class="value">12</span></div>
+        <h3>პროექტის მიმოხილვა</h3>
+        <p>ორი რიგი, თითო რიგში 6 დუპლექსი (სულ 12 ერთეული), ცენტრალური გასასვლელი გზით (~4 მ). თითოეული ერთეული მოიცავს ავტოფარეხს, საცხოვრებელს, კერძო ეზოს და სახურავის ვერანდას.</p>
+        <div class="kpi"><span>ერთეულები</span><span class="value">12</span></div>
       </div>
       <div class="card">
-        <h3>Financial Highlights</h3>
-        <p>Target ADR ₾150, 75% occupancy. Estimated gross ₾492,750; net distributable ~₾271,000 after OPEX and management.</p>
-        <div class="kpi"><span>Est. ROI</span><span class="value">~48.7%/yr</span></div>
+        <h3>ფინანსური მაჩვენებლები</h3>
+        <p>ADR ₾150, 75% დატვირთვა. სავარაუდო მთლიანი შემოსავალი ₾492,750; განაწილებადი წმინდა ~₾271,000 ოპერაციულ ხარჯებსა და მენეჯმენტის შემდეგ.</p>
+        <div class="kpi"><span>მოსალოდნელი ROI</span><span class="value">~48.7%/წ</span></div>
       </div>
       <div class="card">
-        <h3>Ownership Model</h3>
-        <p>Fractional ownership via SPV with monthly distributions. Minimum buy-in 1% (₾5,569 approx.). Operator retains 10–20% equity.</p>
-        <div class="kpi"><span>Min. Buy-in</span><span class="value">1%</span></div>
+        <h3>ხელOwnership მოდელი</h3>
+        <p>ფრაქციული მფლობელობა SPV საშუალებით, თვიური განაწილებით წილის შესაბამისად. მინიმალური ბაი-ინი 1% (~₾5,569). ოპერატორი ინარჩუნებს 10–20% წილს.</p>
+        <div class="kpi"><span>მინ. წილი</span><span class="value">1%</span></div>
       </div>
     </div>
   </main>
@@ -63,19 +84,19 @@
   <section class="container section">
     <div class="grid two">
       <div class="card">
-        <h3>Site Blueprint</h3>
-        <p class="small">Top-down plan with dimensions and driveway access to all garages.</p>
+        <h3>საიტის გეგმა</h3>
+        <p class="small">ზედხედის სქემა ზომებითა და ცენტრალური გზით — ავტოფარეხებზე დაშვება ყველა ერთეულისთვის.</p>
         <div class="figure">
-          <img src="/assets/images/site_layout.png" alt="Site layout plan" />
-          <div class="caption">Full diagram in the Site Layout section</div>
+          <img src="/assets/images/site_layout.png" alt="საიტის გეგმა" />
+          <div class="caption">სრული დიაგრამა — „საიტის გეგმა“ გვერდზე</div>
         </div>
       </div>
       <div class="card">
-        <h3>Investor Materials</h3>
-        <p class="small">Download the pitch deck and Excel pro-forma including sensitivity and payouts.</p>
+        <h3>ინვესტორის მასალები</h3>
+        <p class="small">ჩამოტვირთეთ პრეზენტაცია და Excel პრო-ფორმა (სენსიტივობა და გადახდები).</p>
         <div style="display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.4rem;">
-          <a class="btn" href="/assets/downloads/pitch_deck.pptx" download>Pitch Deck (PPTX)</a>
-          <a class="btn" href="/assets/downloads/financial_model.xlsx" download>Financial Model (XLSX)</a>
+          <a class="btn" href="/assets/downloads/pitch_deck.pptx" download>პრეზენტაცია (PPTX)</a>
+          <a class="btn" href="/assets/downloads/financial_model.xlsx" download>ფინანსური მოდელი (XLSX)</a>
         </div>
       </div>
     </div>
@@ -84,10 +105,10 @@
   <footer class="footer">
     <div class="container">
       <div class="links">
-        <span>© Container House Investment</span>
-        <a href="/investment.html">Investment</a>
-        <a href="/operations.html">Operations</a>
-        <a href="/downloads.html">Downloads</a>
+        <span>© კონტეინერის სახლების ინვესტიცია</span>
+        <a href="/investment.html">ინვესტიცია</a>
+        <a href="/operations.html">ოპერაციები</a>
+        <a href="/downloads.html">ჩამოტვირთვები</a>
       </div>
     </div>
   </footer>
