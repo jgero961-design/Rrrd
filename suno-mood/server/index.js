@@ -78,21 +78,22 @@ app.post('/api/generate', async (req, res) => {
 
     console.log('Generating with params:', { mood: mood || null, model, instrumental, callBackUrl, prompt: prompt.slice(0, 80) });
 
-    // Send form-encoded as Suno expects callBackUrl
-    const formBody = qs.stringify({
+    // Send JSON as Suno expects callBackUrl in JSON body
+    const body = {
       prompt,
       customMode: true,
       instrumental,
       model,
       callBackUrl: callBackUrl || '',
-    });
-    const formResp = await axios.post(
+    };
+    const bodyString = JSON.stringify(body);
+    const jsonResp = await axios.post(
       `${SUNO_API_BASE}/api/v1/generate`,
-      formBody,
+      body,
       {
         headers: {
           'Authorization': `Bearer ${SUNO_API_KEY}`,
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
         timeout: 30000,
@@ -100,12 +101,12 @@ app.post('/api/generate', async (req, res) => {
       }
     );
 
-    let data = formResp.data;
+    let data = jsonResp.data;
     let taskId = data?.data?.taskId || data?.taskId || data?.id;
 
     if (!taskId) {
-      console.error('Suno generate unexpected:', { status: formResp.status, data });
-      return res.status(502).json({ error: 'Unexpected response from Suno API', status: formResp.status, details: data, attemptedCallBackUrl: callBackUrl });
+      console.error('Suno generate unexpected:', { status: jsonResp.status, data, sent: body });
+      return res.status(502).json({ error: 'Unexpected response from Suno API', status: jsonResp.status, details: data, attemptedCallBackUrl: callBackUrl, sent: body });
     }
 
     res.json({ taskId });
@@ -127,11 +128,12 @@ app.get('/api/status/:taskId', async (req, res) => {
     }
 
     const response = await axios.get(
-      `${SUNO_API_BASE}/api/v1/tasks/${encodeURIComponent(taskId)}`,
+      `${SUNO_API_BASE}/api/v1/generate/record-info`,
       {
         headers: {
           'Authorization': `Bearer ${SUNO_API_KEY}`,
-        }
+        },
+        params: { taskId }
       }
     );
 
