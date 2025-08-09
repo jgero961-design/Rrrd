@@ -10,6 +10,9 @@
   <nav class="navbar">
     <div class="container inner">
       <div class="brand"><div class="logo"></div> Container House Investment</div>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
       <div class="navlinks">
         <a href="/index.html">Overview</a>
         <a href="/layout.html">Site Layout</a>
@@ -25,15 +28,15 @@
   <header class="hero">
     <div class="container">
       <h1>Financial Model & Assumptions</h1>
-      <p class="lead">ADR ₾150, 75% occupancy, OPEX 30% of gross, management 10% of gross. CAPEX range ₾385k–₾728k.</p>
+      <p class="lead">ADR ₾150, 75% occupancy, OPEX 30%, management 10%, CAPEX ₾385k–₾728k. Adjust below to explore scenarios.</p>
     </div>
   </header>
 
   <main class="container section">
-    <div class="grid cols-3">
+    <div class="grid auto">
       <div class="card">
         <h3>Gross Revenue (est.)</h3>
-        <p class="small">Based on ADR × occupancy × nights × units</p>
+        <p class="small">ADR × occupancy × nights × units</p>
         <div class="kpi"><span>Total</span><span class="value">₾492,750</span></div>
       </div>
       <div class="card">
@@ -43,23 +46,26 @@
       </div>
       <div class="card">
         <h3>Implied ROI</h3>
-        <p class="small">Versus CAPEX midpoint</p>
+        <p class="small">vs CAPEX midpoint</p>
         <div class="kpi"><span>Annual</span><span class="value">~48.7%</span></div>
       </div>
     </div>
 
     <div class="section card" id="calc">
       <h3>Interactive Calculator</h3>
-      <p class="muted small">Adjust assumptions to explore scenarios. Calculates gross, net, ROI, and monthly payouts by ownership.</p>
+      <p class="muted small">Large inputs for mobile; results update instantly.</p>
       <form id="calc-form">
-        <div class="form-grid">
+        <div class="calc-grid">
           <div>
             <label class="label" for="units">Units</label>
             <input class="input" id="units" type="number" min="1" value="12" />
           </div>
           <div>
             <label class="label" for="adr">ADR (GEL)</label>
-            <input class="input" id="adr" type="number" min="0" step="1" value="150" />
+            <div class="input-row">
+              <input class="input" id="adr" type="number" min="0" step="1" value="150" />
+              <span class="badge">₾</span>
+            </div>
           </div>
           <div>
             <label class="label" for="occ">Occupancy (%)</label>
@@ -88,41 +94,22 @@
         </div>
       </form>
 
-      <div class="grid cols-3" style="margin-top:1rem;">
-        <div class="card">
-          <div class="small">Gross Annual Revenue</div>
-          <div id="out-gross" class="value" style="font-size:1.4rem;">–</div>
-        </div>
-        <div class="card">
-          <div class="small">Operating Expenses (annual)</div>
-          <div id="out-opex" class="value" style="font-size:1.4rem;">–</div>
-        </div>
-        <div class="card">
-          <div class="small">Management Fee (annual)</div>
-          <div id="out-mgmt" class="value" style="font-size:1.4rem;">–</div>
-        </div>
-        <div class="card">
-          <div class="small">Net Distributable Cash (annual)</div>
-          <div id="out-net" class="value" style="font-size:1.4rem;">–</div>
-        </div>
-        <div class="card">
-          <div class="small">Implied ROI (annual)</div>
-          <div id="out-roi" class="value" style="font-size:1.4rem;">–</div>
-        </div>
-        <div class="card">
-          <div class="small">Monthly Net (project)</div>
-          <div id="out-monthly" class="value" style="font-size:1.4rem;">–</div>
-        </div>
+      <div class="results-grid" style="margin-top:var(--space-3);">
+        <div class="card"><div class="small">Gross Annual Revenue</div><div id="out-gross" class="value" style="font-size:1.3rem;">–</div></div>
+        <div class="card"><div class="small">Operating Expenses (annual)</div><div id="out-opex" class="value" style="font-size:1.3rem;">–</div></div>
+        <div class="card"><div class="small">Management Fee (annual)</div><div id="out-mgmt" class="value" style="font-size:1.3rem;">–</div></div>
+        <div class="card"><div class="small">Net Distributable Cash (annual)</div><div id="out-net" class="value" style="font-size:1.3rem;">–</div></div>
+        <div class="card"><div class="small">Implied ROI (annual)</div><div id="out-roi" class="value" style="font-size:1.3rem;">–</div></div>
+        <div class="card"><div class="small">Monthly Net (project)</div><div id="out-monthly" class="value" style="font-size:1.3rem;">–</div></div>
       </div>
 
-      <div class="kpi" style="margin-top:1rem;">
-        <span>Your Monthly Payout</span>
-        <span id="out-own-monthly" class="value">–</span>
-      </div>
-
-      <div style="margin-top:1rem; display:flex; gap:0.6rem; flex-wrap:wrap;">
-        <a class="btn" href="/assets/downloads/financial_model.xlsx" download>Download Excel Model</a>
-        <a class="btn secondary" href="/downloads.html">All Downloads</a>
+      <div class="cta-bar" style="margin-top:var(--space-3);">
+        <div class="cta-inner">
+          <div class="small">Your Monthly Payout</div>
+          <div id="out-own-monthly" class="value" style="font-size:1.4rem;">–</div>
+          <div style="flex:1"></div>
+          <a class="btn" href="/assets/downloads/financial_model.xlsx" download>Download Excel Model</a>
+        </div>
       </div>
     </div>
   </main>

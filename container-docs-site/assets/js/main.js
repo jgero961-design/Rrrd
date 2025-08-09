@@ -1,11 +1,28 @@
 function setActiveNav() {
   const here = location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.navlinks a').forEach(a => {
-    const href = a.getAttribute('href');
-    if ((here === '' && href.endsWith('index.html')) || href.endsWith(here)) {
-      a.classList.add('active');
-    }
+    const href = a.getAttribute('href') || '';
+    if (href.endsWith(here)) a.classList.add('active');
   });
+}
+
+function toggleNav(open) {
+  const body = document.body;
+  if (typeof open === 'boolean') {
+    body.classList.toggle('nav-open', open);
+  } else {
+    body.classList.toggle('nav-open');
+  }
+  const btn = document.querySelector('.nav-toggle');
+  if (btn) btn.setAttribute('aria-expanded', body.classList.contains('nav-open'));
+}
+
+function bindNav() {
+  const btn = document.querySelector('.nav-toggle');
+  if (!btn) return;
+  btn.addEventListener('click', () => toggleNav());
+  // Close on link click (mobile)
+  document.querySelectorAll('.navlinks a').forEach(a => a.addEventListener('click', () => toggleNav(false)));
 }
 
 function formatCurrencyGel(num) {
@@ -14,14 +31,15 @@ function formatCurrencyGel(num) {
 }
 
 function recalc() {
-  const units = parseFloat(document.getElementById('units').value) || 0;
-  const adr = parseFloat(document.getElementById('adr').value) || 0;
-  const occ = (parseFloat(document.getElementById('occ').value) || 0) / 100;
-  const opex = (parseFloat(document.getElementById('opex').value) || 0) / 100;
-  const mgmt = (parseFloat(document.getElementById('mgmt').value) || 0) / 100;
-  const capexLow = parseFloat(document.getElementById('capexLow').value) || 0;
-  const capexHigh = parseFloat(document.getElementById('capexHigh').value) || 0;
-  const ownership = (parseFloat(document.getElementById('ownership').value) || 0) / 100;
+  const q = id => document.getElementById(id);
+  const units = parseFloat(q('units')?.value) || 0;
+  const adr = parseFloat(q('adr')?.value) || 0;
+  const occ = (parseFloat(q('occ')?.value) || 0) / 100;
+  const opex = (parseFloat(q('opex')?.value) || 0) / 100;
+  const mgmt = (parseFloat(q('mgmt')?.value) || 0) / 100;
+  const capexLow = parseFloat(q('capexLow')?.value) || 0;
+  const capexHigh = parseFloat(q('capexHigh')?.value) || 0;
+  const ownership = (parseFloat(q('ownership')?.value) || 0) / 100;
 
   const nights = 365;
   const gross = units * adr * nights * occ;
@@ -33,13 +51,14 @@ function recalc() {
   const monthlyNet = net / 12;
   const monthlyPayout = monthlyNet * ownership;
 
-  document.getElementById('out-gross').textContent = formatCurrencyGel(gross);
-  document.getElementById('out-opex').textContent = formatCurrencyGel(opexAmt);
-  document.getElementById('out-mgmt').textContent = formatCurrencyGel(mgmtAmt);
-  document.getElementById('out-net').textContent = formatCurrencyGel(net);
-  document.getElementById('out-roi').textContent = `${(roi * 100).toFixed(1)}%`;
-  document.getElementById('out-monthly').textContent = formatCurrencyGel(monthlyNet);
-  document.getElementById('out-own-monthly').textContent = formatCurrencyGel(monthlyPayout);
+  const put = (id, txt) => { const el = q(id); if (el) el.textContent = txt; };
+  put('out-gross', formatCurrencyGel(gross));
+  put('out-opex', formatCurrencyGel(opexAmt));
+  put('out-mgmt', formatCurrencyGel(mgmtAmt));
+  put('out-net', formatCurrencyGel(net));
+  put('out-roi', `${(roi * 100).toFixed(1)}%`);
+  put('out-monthly', formatCurrencyGel(monthlyNet));
+  put('out-own-monthly', formatCurrencyGel(monthlyPayout));
 }
 
 function bindCalc() {
@@ -50,5 +69,6 @@ function bindCalc() {
 
 window.addEventListener('DOMContentLoaded', () => {
   setActiveNav();
+  bindNav();
   if (document.getElementById('calc-form')) bindCalc();
 });
