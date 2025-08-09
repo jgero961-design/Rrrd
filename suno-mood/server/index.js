@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import axios from 'axios';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import qs from 'querystring';
 
 dotenv.config();
 
@@ -15,18 +16,19 @@ const PORT = process.env.PORT || 3000;
 
 const SUNO_API_BASE = 'https://api.sunoapi.org';
 const SUNO_API_KEY = process.env.SUNO_API_KEY;
+const PUBLIC_BASE_URL = process.env.PUBLIC_BASE_URL ? process.env.PUBLIC_BASE_URL.replace(/\/$/, '') : '';
 
 if (!SUNO_API_KEY) {
   console.warn('Warning: SUNO_API_KEY is not set. Set it in a .env file or environment variable.');
 }
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '1mb' }));
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Simple health check
 app.get('/health', (_req, res) => {
-  res.json({ ok: true });
+  res.json({ ok: true, publicBaseUrl: PUBLIC_BASE_URL || null });
 });
 
 // Map moods to prompts
@@ -37,6 +39,26 @@ const MOOD_TO_PROMPT = {
   calm: 'Soothing lo-fi chillhop instrumental with warm Rhodes, vinyl texture, soft drums, 80 BPM, relaxed and cozy.',
   dark: 'Dark, moody trap instrumental with 808s, eerie pads, sparse piano, 140 BPM, minor key, atmospheric.'
 };
+
+// In-memory webhook store
+const webhookByTaskId = new Map();
+
+// Webhook receiver (make sure PUBLIC_BASE_URL is publicly reachable)
+app.post('/api/webhook', (req, res) => {
+  try {
+    const payload = req.body || {};
+    const taskId = payload?.data?.taskId || payload?.taskId || payload?.id;
+    if (taskId) {
+      webhookByTaskId.set(taskId, payload);
+      console.log('Webhook received for taskId', taskId);
+    } else {
+      console.log('Webhook received without taskId');
+    }
+  } catch (e) {
+    console.error('Webhook handling error:', e.message);
+  }
+  res.status(200).json({ ok: true });
+});
 
 // Start a generation by mood or custom prompt
 app.post('/api/generate', async (req, res) => {
@@ -49,33 +71,45 @@ app.post('/api/generate', async (req, res) => {
       return res.status(400).json({ error: 'Provide either a valid mood or a custom prompt.' });
     }
 
-    const response = await axios.post(
+    const callBackUrl = PUBLIC_BASE_URL ? `${PUBLIC_BASE_URL}/api/webhook` : undefined;
+    if (!callBackUrl) {
+      console.warn('PUBLIC_BASE_URL is not set; Suno API may reject request due to missing callBackUrl');
+    }
+
+    // Send form-encoded as Suno expects callBackUrl
+    const formBody = qs.stringify({
+      prompt,
+      customMode: true,
+      instrumental,
+      model,
+      callBackUrl: callBackUrl || '',
+    });
+    const formResp = await axios.post(
       `${SUNO_API_BASE}/api/v1/generate`,
-      {
-        prompt,
-        customMode: true,
-        instrumental,
-        model,
-      },
+      formBody,
       {
         headers: {
           'Authorization': `Bearer ${SUNO_API_KEY}`,
-          'Content-Type': 'application/json',
-        }
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept': 'application/json',
+        },
+        timeout: 30000,
+        validateStatus: () => true,
       }
     );
 
-    // Expecting response contains taskId
-    const data = response.data;
-    const taskId = data?.data?.taskId || data?.taskId || data?.id;
+    let data = formResp.data;
+    let taskId = data?.data?.taskId || data?.taskId || data?.id;
 
     if (!taskId) {
-      return res.status(502).json({ error: 'Unexpected response from Suno API', details: data });
+      console.error('Suno generate unexpected:', { status: formResp.status, data });
+      return res.status(502).json({ error: 'Unexpected response from Suno API', status: formResp.status, details: data });
     }
 
     res.json({ taskId });
   } catch (err) {
     const status = err.response?.status || 500;
+    console.error('Suno generate error:', err.response?.data || err.message);
     res.status(status).json({ error: 'Failed to start generation', details: err.response?.data || err.message });
   }
 });
@@ -84,6 +118,11 @@ app.post('/api/generate', async (req, res) => {
 app.get('/api/status/:taskId', async (req, res) => {
   try {
     const { taskId } = req.params;
+
+    // Serve from webhook data if available
+    if (webhookByTaskId.has(taskId)) {
+      return res.json(webhookByTaskId.get(taskId));
+    }
 
     const response = await axios.get(
       `${SUNO_API_BASE}/api/v1/tasks/${encodeURIComponent(taskId)}`,
@@ -94,7 +133,6 @@ app.get('/api/status/:taskId', async (req, res) => {
       }
     );
 
-    // Expecting fields like status and audioUrl (or similar)
     const data = response.data;
     res.json(data);
   } catch (err) {
@@ -110,4 +148,5 @@ app.get(/^\/(?!api).*/, (_req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Server listening on http://localhost:${PORT}`);
+  console.log('PUBLIC_BASE_URL =', PUBLIC_BASE_URL || '(not set)');
 });

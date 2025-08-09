@@ -1,2 +1,10 @@
-[dotenv@17.2.1] injecting env (2) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+[dotenv@17.2.1] injecting env (2) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
 Server listening on http://localhost:3000
+Suno generate unexpected: {
+  status: 200,
+  data: { code: 400, msg: 'Please enter callBackUrl.', data: null }
+}
+Suno generate unexpected: {
+  status: 200,
+  data: { code: 400, msg: 'Please enter callBackUrl.', data: null }
+}
