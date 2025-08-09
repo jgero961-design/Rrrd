@@ -1,114 +1,116 @@
 <!doctype html>
-<html lang="en">
+<html lang="ka">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Financials & Calculator — Container House Investment</title>
+  <title>ფინანსები და კალკულატორი — კონტეინერის სახლების ინვესტიცია</title>
   <link rel="stylesheet" href="/assets/css/styles.css" />
 </head>
 <body>
   <nav class="navbar">
     <div class="container inner">
-      <div class="brand"><div class="logo"></div> Container House Investment</div>
-      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <div class="brand"><div class="logo"></div> კონტეინერის სახლების ინვესტიცია</div>
+      <button class="nav-toggle" aria-label="მენიუ" aria-expanded="false">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
       </button>
       <div class="navlinks">
-        <a href="/index.html">Overview</a>
-        <a href="/layout.html">Site Layout</a>
-        <a href="/units.html">Units</a>
-        <a href="/financials.html">Financials</a>
-        <a href="/investment.html">Investment</a>
-        <a href="/operations.html">Operations</a>
-        <a href="/downloads.html">Downloads</a>
+        <a href="/index.html">მთავარი</a>
+        <a href="/layout.html">საიტის გეგმა</a>
+        <a href="/units.html">ერთეულები</a>
+        <a href="/financials.html">ფინანსები</a>
+        <a href="/investment.html">ინვესტიცია</a>
+        <a href="/operations.html">ოპერაციები</a>
+        <a href="/downloads.html">ჩამოტვირთვები</a>
+        <a href="/index.html">KA</a>
+        <a href="/en/index.html">EN</a>
       </div>
     </div>
   </nav>
 
   <header class="hero">
     <div class="container">
-      <h1>Financial Model & Assumptions</h1>
-      <p class="lead">ADR ₾150, 75% occupancy, OPEX 30%, management 10%, CAPEX ₾385k–₾728k. Adjust below to explore scenarios.</p>
+      <h1>ფინანსური მოდელი და დაშვებები</h1>
+      <p class="lead">ADR ₾150, დატვირთვა 75%, ოპერაციული ხარჯები 30%, მენეჯმენტი 10%, CAPEX ₾385k–₾728k. შეცვალეთ ქვემოთ სენსიტივობისთვის.</p>
     </div>
   </header>
 
   <main class="container section">
     <div class="grid auto">
       <div class="card">
-        <h3>Gross Revenue (est.)</h3>
-        <p class="small">ADR × occupancy × nights × units</p>
-        <div class="kpi"><span>Total</span><span class="value">₾492,750</span></div>
+        <h3>მთლიანი შემოსავალი (სავარაუდო)</h3>
+        <p class="small">ADR × დატვირთვა × ღამეები × ერთეულები</p>
+        <div class="kpi"><span>სულ</span><span class="value">₾492,750</span></div>
       </div>
       <div class="card">
-        <h3>Net Distributable (est.)</h3>
-        <p class="small">After OPEX and management fee</p>
-        <div class="kpi"><span>Annual</span><span class="value">~₾271,000</span></div>
+        <h3>განაწილებადი წმინდა (სავარაუდო)</h3>
+        <p class="small">ოპერაციული და მენეჯმენტის ხარჯების შემდეგ</p>
+        <div class="kpi"><span>წლიური</span><span class="value">~₾271,000</span></div>
       </div>
       <div class="card">
-        <h3>Implied ROI</h3>
-        <p class="small">vs CAPEX midpoint</p>
-        <div class="kpi"><span>Annual</span><span class="value">~48.7%</span></div>
+        <h3>მიძღვნილი ROI</h3>
+        <p class="small">CAPEX midpoint-თან მიმართებით</p>
+        <div class="kpi"><span>წლიური</span><span class="value">~48.7%</span></div>
       </div>
     </div>
 
     <div class="section card" id="calc">
-      <h3>Interactive Calculator</h3>
-      <p class="muted small">Large inputs for mobile; results update instantly.</p>
+      <h3>ინტერაქტიური კალკულატორი</h3>
+      <p class="muted small">შეიყვანეთ თქვენი დაშვებები. შედეგები ახლდება ავტომატურად.</p>
       <form id="calc-form">
         <div class="calc-grid">
           <div>
-            <label class="label" for="units">Units</label>
+            <label class="label" for="units">ერთეულების რაოდენობა</label>
             <input class="input" id="units" type="number" min="1" value="12" />
           </div>
           <div>
-            <label class="label" for="adr">ADR (GEL)</label>
+            <label class="label" for="adr">ADR (₾)</label>
             <div class="input-row">
               <input class="input" id="adr" type="number" min="0" step="1" value="150" />
               <span class="badge">₾</span>
             </div>
           </div>
           <div>
-            <label class="label" for="occ">Occupancy (%)</label>
+            <label class="label" for="occ">დატვირთვა (%)</label>
             <input class="input" id="occ" type="number" min="0" max="100" step="1" value="75" />
           </div>
           <div>
-            <label class="label" for="opex">OPEX (% of gross)</label>
+            <label class="label" for="opex">ოპერაციული ხარჯები (% მთლიანზე)</label>
             <input class="input" id="opex" type="number" min="0" max="100" step="1" value="30" />
           </div>
           <div>
-            <label class="label" for="mgmt">Management (% of gross)</label>
+            <label class="label" for="mgmt">მენეჯმენტი (% მთლიანზე)</label>
             <input class="input" id="mgmt" type="number" min="0" max="100" step="1" value="10" />
           </div>
           <div>
-            <label class="label" for="capexLow">CAPEX Low (GEL)</label>
+            <label class="label" for="capexLow">CAPEX (ქვედა)</label>
             <input class="input" id="capexLow" type="number" min="0" step="1000" value="385000" />
           </div>
           <div>
-            <label class="label" for="capexHigh">CAPEX High (GEL)</label>
+            <label class="label" for="capexHigh">CAPEX (ზედა)</label>
             <input class="input" id="capexHigh" type="number" min="0" step="1000" value="728000" />
           </div>
           <div>
-            <label class="label" for="ownership">Your Ownership (%)</label>
+            <label class="label" for="ownership">თქვენი წილი (%)</label>
             <input class="input" id="ownership" type="number" min="0" max="100" step="0.1" value="1" />
           </div>
         </div>
       </form>
 
       <div class="results-grid" style="margin-top:var(--space-3);">
-        <div class="card"><div class="small">Gross Annual Revenue</div><div id="out-gross" class="value" style="font-size:1.3rem;">–</div></div>
-        <div class="card"><div class="small">Operating Expenses (annual)</div><div id="out-opex" class="value" style="font-size:1.3rem;">–</div></div>
-        <div class="card"><div class="small">Management Fee (annual)</div><div id="out-mgmt" class="value" style="font-size:1.3rem;">–</div></div>
-        <div class="card"><div class="small">Net Distributable Cash (annual)</div><div id="out-net" class="value" style="font-size:1.3rem;">–</div></div>
-        <div class="card"><div class="small">Implied ROI (annual)</div><div id="out-roi" class="value" style="font-size:1.3rem;">–</div></div>
-        <div class="card"><div class="small">Monthly Net (project)</div><div id="out-monthly" class="value" style="font-size:1.3rem;">–</div></div>
+        <div class="card"><div class="small">მთლიანი შემოსავალი (წლიური)</div><div id="out-gross" class="value" style="font-size:1.3rem;">–</div></div>
+        <div class="card"><div class="small">ოპერაციული ხარჯები (წლიური)</div><div id="out-opex" class="value" style="font-size:1.3rem;">–</div></div>
+        <div class="card"><div class="small">მენეჯმენტის ხარჯი (წლიური)</div><div id="out-mgmt" class="value" style="font-size:1.3rem;">–</div></div>
+        <div class="card"><div class="small">განაწილებადი წმინდა (წლიური)</div><div id="out-net" class="value" style="font-size:1.3rem;">–</div></div>
+        <div class="card"><div class="small">მიძღვნილი ROI (წლიური)</div><div id="out-roi" class="value" style="font-size:1.3rem;">–</div></div>
+        <div class="card"><div class="small">საშ. თვიური წმინდა (პროექტი)</div><div id="out-monthly" class="value" style="font-size:1.3rem;">–</div></div>
       </div>
 
       <div class="cta-bar" style="margin-top:var(--space-3);">
         <div class="cta-inner">
-          <div class="small">Your Monthly Payout</div>
+          <div class="small">თქვენი თვიური განაწილება</div>
           <div id="out-own-monthly" class="value" style="font-size:1.4rem;">–</div>
           <div style="flex:1"></div>
-          <a class="btn" href="/assets/downloads/financial_model.xlsx" download>Download Excel Model</a>
+          <a class="btn" href="/assets/downloads/financial_model.xlsx" download>Excel მოდელი</a>
         </div>
       </div>
     </div>
@@ -116,9 +118,7 @@
 
   <footer class="footer">
     <div class="container">
-      <div class="links">
-        <span>© Container House Investment</span>
-      </div>
+      <div class="links"><span>© კონტეინერის სახლების ინვესტიცია</span></div>
     </div>
   </footer>
   <script src="/assets/js/main.js"></script>
