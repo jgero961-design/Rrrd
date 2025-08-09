@@ -10,3 +10,69 @@ PUBLIC_BASE_URL = https://method-pts-rollGenerating with params: {
 Webhook received without taskId
 Webhook received without taskId
 Webhook received without taskId
+Generating with params: {
+  mood: 'happy',
+  model: 'V3_5',
+  instrumental: true,
+  callBackUrl: 'https://method-pts-roller-pins.trycloudflare.com/api/webhook',
+  prompt: 'A cheerful, upbeat pop instrumental with bright synths, catchy melody, and 120 B'
+}
+Suno generate unexpected: {
+  status: 200,
+  data: {
+    code: 429,
+    msg: 'The current credits are insufficient. Please top up.',
+    data: null
+  },
+  sent: {
+    prompt: 'A cheerful, upbeat pop instrumental with bright synths, catchy melody, and 120 BPM in major key. Radio-friendly, positive vibes.',
+    customMode: true,
+    instrumental: true,
+    model: 'V3_5',
+    callBackUrl: 'https://method-pts-roller-pins.trycloudflare.com/api/webhook'
+  }
+}
+Generating with params: {
+  mood: 'happy',
+  model: 'V3_5',
+  instrumental: true,
+  callBackUrl: 'https://method-pts-roller-pins.trycloudflare.com/api/webhook',
+  prompt: 'A cheerful, upbeat pop instrumental with bright synths, catchy melody, and 120 B'
+}
+Suno generate unexpected: {
+  status: 200,
+  data: {
+    code: 429,
+    msg: 'The current credits are insufficient. Please top up.',
+    data: null
+  },
+  sent: {
+    prompt: 'A cheerful, upbeat pop instrumental with bright synths, catchy melody, and 120 BPM in major key. Radio-friendly, positive vibes.',
+    customMode: true,
+    instrumental: true,
+    model: 'V3_5',
+    callBackUrl: 'https://method-pts-roller-pins.trycloudflare.com/api/webhook'
+  }
+}
+Generating with params: {
+  mood: 'happy',
+  model: 'V3_5',
+  instrumental: true,
+  callBackUrl: 'https://method-pts-roller-pins.trycloudflare.com/api/webhook',
+  prompt: 'A cheerful, upbeat pop instrumental with bright synths, catchy melody, and 120 B'
+}
+Suno generate unexpected: {
+  status: 200,
+  data: {
+    code: 429,
+    msg: 'The current credits are insufficient. Please top up.',
+    data: null
+  },
+  sent: {
+    prompt: 'A cheerful, upbeat pop instrumental with bright synths, catchy melody, and 120 BPM in major key. Radio-friendly, positive vibes.',
+    customMode: true,
+    instrumental: true,
+    model: 'V3_5',
+    callBackUrl: 'https://method-pts-roller-pins.trycloudflare.com/api/webhook'
+  }
+}
