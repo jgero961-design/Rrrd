@@ -1,10 +1,3 @@
-[dotenv@17.2.1] injecting env (2) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+[dotenv@17.2.1] injecting env (3) from .env -- tip: 📡 auto-backup env with Radar: https://dotenvx.com/radar
 Server listening on http://localhost:3000
-Suno generate unexpected: {
-  status: 200,
-  data: { code: 400, msg: 'Please enter callBackUrl.', data: null }
-}
-Suno generate unexpected: {
-  status: 200,
-  data: { code: 400, msg: 'Please enter callBackUrl.', data: null }
-}
+PUBLIC_BASE_URL = https://recognition-palm-mailto-nh.trycloudflare.com
