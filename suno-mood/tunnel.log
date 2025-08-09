@@ -71,3 +71,9 @@
 2025-08-09T20:06:24Z ERR Request failed error="Unable to reach the origin service. The service may be down or it may not be responding to traffic from cloudflared: dial tcp [::1]:3000: connect: connection refused" connIndex=0 dest=https://recognition-palm-mailto-nh.trycloudflare.com/ event=0 ip=198.41.192.47 type=http
 2025-08-09T20:06:25Z ERR  error="Unable to reach the origin service. The service may be down or it may not be responding to traffic from cloudflared: dial tcp [::1]:3000: connect: connection refused" connIndex=0 event=1 ingressRule=0 originService=http://localhost:3000
 2025-08-09T20:06:25Z ERR Request failed error="Unable to reach the origin service. The service may be down or it may not be responding to traffic from cloudflared: dial tcp [::1]:3000: connect: connection refused" connIndex=0 dest=https://recognition-palm-mailto-nh.trycloudflare.com/favicon.ico event=0 ip=198.41.192.47 type=http
+2025-08-09T20:13:23Z INF Initiating graceful shutdown due to signal terminated ...
+2025-08-09T20:13:23Z ERR Failed to serve tunnel connection error="context canceled" connIndex=0 event=0 ip=198.41.192.47
+2025-08-09T20:13:23Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.47
+2025-08-09T20:13:23Z ERR no more connections active and exiting
+2025-08-09T20:13:23Z INF Tunnel server stopped
+2025-08-09T20:13:23Z INF Metrics server stopped
