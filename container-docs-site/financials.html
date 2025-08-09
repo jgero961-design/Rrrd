@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Financials & Calculator — Container House Investment</title>
+  <link rel="stylesheet" href="./assets/css/styles.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container inner">
+      <div class="brand"><div class="logo"></div> Container House Investment</div>
+      <div class="navlinks">
+        <a href="index.html">Overview</a>
+        <a href="layout.html">Site Layout</a>
+        <a href="units.html">Units</a>
+        <a href="financials.html">Financials</a>
+        <a href="investment.html">Investment</a>
+        <a href="operations.html">Operations</a>
+        <a href="downloads.html">Downloads</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <h1>Financial Model & Assumptions</h1>
+      <p class="lead">ADR ₾150, 75% occupancy, OPEX 30% of gross, management 10% of gross. CAPEX range ₾385k–₾728k.</p>
+    </div>
+  </header>
+
+  <main class="container section">
+    <div class="grid cols-3">
+      <div class="card">
+        <h3>Gross Revenue (est.)</h3>
+        <p class="small">Based on ADR × occupancy × nights × units</p>
+        <div class="kpi"><span>Total</span><span class="value">₾492,750</span></div>
+      </div>
+      <div class="card">
+        <h3>Net Distributable (est.)</h3>
+        <p class="small">After OPEX and management fee</p>
+        <div class="kpi"><span>Annual</span><span class="value">~₾271,000</span></div>
+      </div>
+      <div class="card">
+        <h3>Implied ROI</h3>
+        <p class="small">Versus CAPEX midpoint</p>
+        <div class="kpi"><span>Annual</span><span class="value">~48.7%</span></div>
+      </div>
+    </div>
+
+    <div class="section card" id="calc">
+      <h3>Interactive Calculator</h3>
+      <p class="muted small">Adjust assumptions to explore scenarios. Calculates gross, net, ROI, and monthly payouts by ownership.</p>
+      <form id="calc-form">
+        <div class="form-grid">
+          <div>
+            <label class="label" for="units">Units</label>
+            <input class="input" id="units" type="number" min="1" value="12" />
+          </div>
+          <div>
+            <label class="label" for="adr">ADR (GEL)</label>
+            <input class="input" id="adr" type="number" min="0" step="1" value="150" />
+          </div>
+          <div>
+            <label class="label" for="occ">Occupancy (%)</label>
+            <input class="input" id="occ" type="number" min="0" max="100" step="1" value="75" />
+          </div>
+          <div>
+            <label class="label" for="opex">OPEX (% of gross)</label>
+            <input class="input" id="opex" type="number" min="0" max="100" step="1" value="30" />
+          </div>
+          <div>
+            <label class="label" for="mgmt">Management (% of gross)</label>
+            <input class="input" id="mgmt" type="number" min="0" max="100" step="1" value="10" />
+          </div>
+          <div>
+            <label class="label" for="capexLow">CAPEX Low (GEL)</label>
+            <input class="input" id="capexLow" type="number" min="0" step="1000" value="385000" />
+          </div>
+          <div>
+            <label class="label" for="capexHigh">CAPEX High (GEL)</label>
+            <input class="input" id="capexHigh" type="number" min="0" step="1000" value="728000" />
+          </div>
+          <div>
+            <label class="label" for="ownership">Your Ownership (%)</label>
+            <input class="input" id="ownership" type="number" min="0" max="100" step="0.1" value="1" />
+          </div>
+        </div>
+      </form>
+
+      <div class="grid cols-3" style="margin-top:1rem;">
+        <div class="card">
+          <div class="small">Gross Annual Revenue</div>
+          <div id="out-gross" class="value" style="font-size:1.4rem;">–</div>
+        </div>
+        <div class="card">
+          <div class="small">Operating Expenses (annual)</div>
+          <div id="out-opex" class="value" style="font-size:1.4rem;">–</div>
+        </div>
+        <div class="card">
+          <div class="small">Management Fee (annual)</div>
+          <div id="out-mgmt" class="value" style="font-size:1.4rem;">–</div>
+        </div>
+        <div class="card">
+          <div class="small">Net Distributable Cash (annual)</div>
+          <div id="out-net" class="value" style="font-size:1.4rem;">–</div>
+        </div>
+        <div class="card">
+          <div class="small">Implied ROI (annual)</div>
+          <div id="out-roi" class="value" style="font-size:1.4rem;">–</div>
+        </div>
+        <div class="card">
+          <div class="small">Monthly Net (project)</div>
+          <div id="out-monthly" class="value" style="font-size:1.4rem;">–</div>
+        </div>
+      </div>
+
+      <div class="kpi" style="margin-top:1rem;">
+        <span>Your Monthly Payout</span>
+        <span id="out-own-monthly" class="value">–</span>
+      </div>
+
+      <div style="margin-top:1rem; display:flex; gap:0.6rem; flex-wrap:wrap;">
+        <a class="btn" href="./assets/downloads/financial_model.xlsx" download>Download Excel Model</a>
+        <a class="btn secondary" href="downloads.html">All Downloads</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="links">
+        <span>© Container House Investment</span>
+      </div>
+    </div>
+  </footer>
+  <script src="./assets/js/main.js"></script>
+</body>
+</html>
