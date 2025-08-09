@@ -1,3 +1,12 @@
 [dotenv@17.2.1] injecting env (3) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
 Server listening on http://localhost:3000
-PUBLIC_BASE_URL = https://method-pts-roller-pins.trycloudflare.com
+PUBLIC_BASE_URL = https://method-pts-rollGenerating with params: {
+  mood: 'happy',
+  model: 'V3_5',
+  instrumental: true,
+  callBackUrl: 'https://method-pts-roller-pins.trycloudflare.com/api/webhook',
+  prompt: 'A cheerful, upbeat pop instrumental with bright synths, catchy melody, and 120 B'
+}
+Webhook received without taskId
+Webhook received without taskId
+Webhook received without taskId
