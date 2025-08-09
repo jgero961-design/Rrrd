@@ -8,11 +8,8 @@ function setActiveNav() {
 
 function toggleNav(open) {
   const body = document.body;
-  if (typeof open === 'boolean') {
-    body.classList.toggle('nav-open', open);
-  } else {
-    body.classList.toggle('nav-open');
-  }
+  if (typeof open === 'boolean') body.classList.toggle('nav-open', open);
+  else body.classList.toggle('nav-open');
   const btn = document.querySelector('.nav-toggle');
   if (btn) btn.setAttribute('aria-expanded', body.classList.contains('nav-open'));
 }
@@ -66,19 +63,20 @@ function bindCalc() {
   recalc();
 }
 
-// Interactive site canvas
+// Investment availability canvas (no rental)
 const siteData = {
   rows: 2,
   cols: 6,
-  drivewayWidthRatio: 0.12, // relative to total height
+  drivewayWidthRatio: 0.12,
   units: Array.from({ length: 12 }, (_, i) => {
     const num = i + 1;
+    const availMap = {1: 100,2: 40,3: 0,4: 60,5: 25,6: 0,7: 80,8: 50,9: 10,10: 0,11: 35,12: 100};
+    const p = availMap[num] ?? 0;
     return {
       id: num,
       title: `ერთეული ${num}`,
-      rentable: true,
-      forSale: [2, 4, 5, 8, 9, 11].includes(num),
-      desc: 'ორი სართული, ავტოფარეხი, ეზო და სახურავზე ვერანდა.'
+      availablePercent: p,
+      desc: 'ორი სართული, ავტოფარეხი, კერძო ეზო და სახურავის ვერანდა. ფრაქციული მფლობელობა SPV-ის მეშვეობით.'
     };
   })
 };
@@ -92,7 +90,7 @@ function initSiteCanvas() {
   function resize() {
     const container = canvas.parentElement;
     const widthCss = Math.min(container.clientWidth, 1100);
-    const heightCss = Math.max(320, Math.round(widthCss * (19 / 58))); // aspect from plot
+    const heightCss = Math.max(340, Math.round(widthCss * (19 / 58)));
     canvas.width = Math.round(widthCss * dpr);
     canvas.height = Math.round(heightCss * dpr);
     canvas.style.width = widthCss + 'px';
@@ -108,8 +106,7 @@ function initSiteCanvas() {
     const pad = Math.max(4 * dpr, Math.min(colW, rowH) * 0.06);
     const rects = [];
     for (let c = 0; c < siteData.cols; c++) {
-      // top row -> odd units: 1,3,5,7,9,11
-      const topIdx = c * 2 + 1; // 1-based
+      const topIdx = c * 2 + 1;
       const bottomIdx = c * 2 + 2;
       rects.push({ id: topIdx, x: c * colW + pad, y: 0 + pad, w: colW - pad * 2, h: rowH - pad * 2 });
       rects.push({ id: bottomIdx, x: c * colW + pad, y: rowH + drivewayH + pad, w: colW - pad * 2, h: rowH - pad * 2 });
@@ -120,11 +117,11 @@ function initSiteCanvas() {
   let rectCache = [];
   let selected = null;
 
-  function colorFor(u) {
-    if (u.forSale && u.rentable) return '#8b5cf6'; // both
-    if (u.forSale) return '#f59e0b';
-    if (u.rentable) return '#22c55e';
-    return '#64748b';
+  function colorForPercent(pct) {
+    if (pct <= 0) return '#64748b'; // sold out
+    if (pct < 25) return '#f97316'; // low
+    if (pct < 60) return '#f59e0b'; // medium
+    return '#22c55e'; // high
   }
 
   function draw() {
@@ -132,7 +129,7 @@ function initSiteCanvas() {
     const W = canvas.width, H = canvas.height;
     ctx.clearRect(0,0,W,H);
 
-    // Background plot area
+    // Background and border
     ctx.fillStyle = '#0f1420';
     ctx.fillRect(0,0,W,H);
     ctx.strokeStyle = '#223049';
@@ -145,19 +142,28 @@ function initSiteCanvas() {
     ctx.fillStyle = '#111827';
     ctx.fillRect(0, rowH, W, drivewayH);
 
-    // Units
+    // Units with availability bar
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.font = `${Math.max(10*dpr, W*0.012)}px sans-serif`;
     for (const r of rectCache) {
       const u = siteData.units.find(x => x.id === r.id);
-      const fill = colorFor(u);
-      ctx.fillStyle = fill + '33';
-      ctx.strokeStyle = fill;
+      const col = colorForPercent(u.availablePercent);
+      ctx.fillStyle = col + '33';
+      ctx.strokeStyle = col;
       ctx.lineWidth = selected?.id === u.id ? 4 : 2;
       roundRect(ctx, r.x, r.y, r.w, r.h, 10 * dpr, true, true);
+      // ID label
       ctx.fillStyle = '#e5e7eb';
       ctx.fillText(String(u.id), r.x + r.w/2, r.y + r.h/2);
+      // Availability bar at bottom
+      const barPad = 6 * dpr;
+      const barH = 10 * dpr;
+      const barW = r.w - barPad * 2;
+      ctx.fillStyle = '#0b1222';
+      roundRect(ctx, r.x + barPad, r.y + r.h - barH - barPad, barW, barH, 4*dpr, true, false);
+      ctx.fillStyle = col;
+      roundRect(ctx, r.x + barPad, r.y + r.h - barH - barPad, barW * (u.availablePercent/100), barH, 4*dpr, true, false);
     }
   }
 
@@ -190,19 +196,12 @@ function initSiteCanvas() {
     nameEl.textContent = u ? u.title : 'აირჩიეთ ერთეული';
     tagsEl.innerHTML = '';
     if (u) {
-      if (u.rentable) {
-        const b = document.createElement('span'); b.className = 'badge'; b.textContent = 'ქირავდება'; tagsEl.appendChild(b);
-      }
-      if (u.forSale) {
-        const b = document.createElement('span'); b.className = 'badge'; b.textContent = 'გაყიდვაშია'; tagsEl.appendChild(b);
-      }
+      const b = document.createElement('span'); b.className = 'badge'; b.textContent = u.availablePercent > 0 ? `ხელმისაწვდომია ${u.availablePercent}%` : 'გაყიდულია'; tagsEl.appendChild(b);
       descEl.textContent = u.desc;
       actEl.innerHTML = '';
-      if (u.rentable) {
-        const a = document.createElement('a'); a.className = 'btn'; a.href = '#'; a.textContent = 'დაჯავშნა'; actEl.appendChild(a);
-      }
-      if (u.forSale) {
-        const a = document.createElement('a'); a.className = 'btn secondary'; a.href = '#'; a.textContent = 'ყიდვა/ინვესტიცია'; actEl.appendChild(a);
+      if (u.availablePercent > 0) {
+        const a = document.createElement('a'); a.className = 'btn'; a.href = 'mailto:invest@example.com?subject=ინვესტიცია — ერთეული ' + encodeURIComponent(u.id); a.textContent = 'ინვესტიციის განაცხადი'; actEl.appendChild(a);
+        const b2 = document.createElement('a'); b2.className = 'btn secondary'; b2.href = '/assets/downloads/pitch_deck.pptx'; b2.textContent = 'ინვესტორის პაკეტი'; actEl.appendChild(b2);
       }
     } else {
       descEl.textContent = 'დააკლიკეთ სქემაზე ერთეულზე დეტალებისთვის.';
@@ -212,14 +211,20 @@ function initSiteCanvas() {
   }
 
   function applyFilters() {
-    const showRent = document.getElementById('filter-rent')?.checked ?? true;
-    const showSale = document.getElementById('filter-sale')?.checked ?? true;
-    for (const u of siteData.units) {
-      const show = (showRent && u.rentable) || (showSale && u.forSale);
-      u._hidden = !show;
-    }
-    // Dim hidden units by temporarily toggling rentable/forSale
+    const onlyAvail = document.getElementById('filter-available')?.checked ?? false;
+    const W = canvas.width, H = canvas.height;
+    // Redraw with dimming
     draw();
+    if (onlyAvail) {
+      const rects = rectCache;
+      for (const r of rects) {
+        const u = siteData.units.find(x => x.id === r.id);
+        if (!u || u.availablePercent <= 0) {
+          ctx.fillStyle = 'rgba(0,0,0,0.45)';
+          roundRect(ctx, r.x, r.y, r.w, r.h, 10 * dpr, true, false);
+        }
+      }
+    }
   }
 
   canvas.addEventListener('click', (e) => {
@@ -231,8 +236,7 @@ function initSiteCanvas() {
     updateSelected(u || null);
   });
   window.addEventListener('resize', resize);
-  document.getElementById('filter-rent')?.addEventListener('change', applyFilters);
-  document.getElementById('filter-sale')?.addEventListener('change', applyFilters);
+  document.getElementById('filter-available')?.addEventListener('change', applyFilters);
 
   resize();
   updateSelected(null);

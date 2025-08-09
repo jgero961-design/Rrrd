@@ -32,21 +32,20 @@
     <div class="container">
       <span class="badge">თბილისი, საქართველო • 58 მ × 19 მ</span>
       <h1>12 ერთეული — ავტოფარეხი, კერძო ეზო და სახურავის ვერანდა</h1>
-      <p class="lead">სრული დოკუმენტაცია ინვესტორებისთვის: გეგმა, ერთეულების აღწერა, ფინანსური მოდელი, მფლობელობა და ოპერაციები.</p>
+      <p class="lead">ინვესტორებისთვის შექმნილი პროექტი: გეგმა, ერთეულების ახსნა, ფინანსური მოდელი, მფლობელობა და ოპერაციები.</p>
       <div style="margin-top:var(--space-3); display:flex; gap:.6rem; flex-wrap:wrap;">
-        <a class="btn" href="/financials.html">ფინანსური მოდელი</a>
-        <a class="btn secondary" href="/layout.html">საიტის გეგმის ნახვა</a>
+        <a class="btn" href="/investment.html">ინვესტიციის პირობები</a>
+        <a class="btn secondary" href="/financials.html">ფინანსური მოდელი</a>
       </div>
     </div>
   </header>
 
   <main class="container section">
     <div class="card" style="margin-bottom:var(--space-6);">
-      <h3>აირჩიეთ სახლი — ქირაობა ან ინვესტიცია</h3>
-      <p class="small">ქვემოთ წარმოდგენილ სქემაზე დააკლიკეთ ერთეულზე, რომ იხილოთ დეტალები. შეგიძლიათ გააფილტროთ მხოლოდ ქირავდება ან მხოლოდ გაყიდვაშია.</p>
+      <h3>აირჩიეთ ერთეული — ინვესტიციის ხელმისაწვდომობა</h3>
+      <p class="small">დააკლიკეთ სქემაზე ერთეულზე დეტალებისთვის. ჩართულია ინვესტორებისთვის განკუთვნილი რეჟიმი — აჩვენებს რა პროცენტი არის ჯერ კიდევ ხელმისაწვდომი თითოეულ ერთეულში.</p>
       <div style="display:flex; gap:var(--space-3); flex-wrap:wrap; align-items:center; margin-bottom:var(--space-3);">
-        <label style="display:flex; align-items:center; gap:.4rem;"><input type="checkbox" id="filter-rent" checked /> <span>ქირავდება</span></label>
-        <label style="display:flex; align-items:center; gap:.4rem;"><input type="checkbox" id="filter-sale" checked /> <span>გაყიდვაშია</span></label>
+        <label style="display:flex; align-items:center; gap:.4rem;"><input type="checkbox" id="filter-available" /> <span>მაჩვენე მხოლოდ ხელმისაწვდომი</span></label>
       </div>
       <div class="grid two" style="align-items:start;">
         <div class="card" style="padding:0; overflow:hidden;">
@@ -59,7 +58,7 @@
           <div id="unit-actions" style="margin-top:var(--space-3); display:flex; gap:.6rem; flex-wrap:wrap;"></div>
         </div>
       </div>
-      <p class="small" style="margin-top:var(--space-3); color:var(--muted);">ლეგენდა: მწვანე — ქირავდება; ნარინჯისფერი — გაყიდვაშია; იისფერი — ორივე.</p>
+      <p class="small" style="margin-top:var(--space-3); color:var(--muted);">ლეგენდა: ნაცრისფერი — გაყიდულია; ნარინჯისფერი — დაბალი ხელმისაწვდომობა; ყვითელი — საშუალო; მწვანე — მაღალი.</p>
     </div>
 
     <div class="grid auto">
@@ -74,10 +73,15 @@
         <div class="kpi"><span>მოსალოდნელი ROI</span><span class="value">~48.7%/წ</span></div>
       </div>
       <div class="card">
-        <h3>ხელOwnership მოდელი</h3>
+        <h3>მფლობელობის მოდელი</h3>
         <p>ფრაქციული მფლობელობა SPV საშუალებით, თვიური განაწილებით წილის შესაბამისად. მინიმალური ბაი-ინი 1% (~₾5,569). ოპერატორი ინარჩუნებს 10–20% წილს.</p>
         <div class="kpi"><span>მინ. წილი</span><span class="value">1%</span></div>
       </div>
+    </div>
+
+    <div class="card" style="margin-top:var(--space-6);">
+      <h3>დისკლეიმერი</h3>
+      <p class="small">ეს ვებსაიტი წარმოადგენს საინფორმაციო მასალას და არ არის საჯარო შემოთავაზება. ინვესტიციასთან დაკავშირებული რისკები მოიცავს კაპიტალის დაკარგვის შესაძლებლობას. გადაწყვეტილების მიღებამდე გაეცანით სრულ დოკუმენტაციას („ინვესტორის პაკეტი“) და კონსულტაციებს.</p>
     </div>
   </main>
 
