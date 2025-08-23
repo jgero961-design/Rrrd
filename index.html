@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>2x2 Matrix Game Solver</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>2x2 Matrix Game Solver</h1>
+  </header>
+
+  <main>
+    <section class="matrix-input" aria-labelledby="matrix-label">
+      <h2 id="matrix-label">Payoff matrix (to Row player)</h2>
+      <div class="grid">
+        <div></div>
+        <div>Col: C1</div>
+        <div>Col: C2</div>
+
+        <div>Row: R1</div>
+        <div>
+          <label class="sr-only" for="a">a (R1,C1)</label>
+          <input id="a" type="number" step="any" value="2">
+        </div>
+        <div>
+          <label class="sr-only" for="b">b (R1,C2)</label>
+          <input id="b" type="number" step="any" value="-1">
+        </div>
+
+        <div>Row: R2</div>
+        <div>
+          <label class="sr-only" for="c">c (R2,C1)</label>
+          <input id="c" type="number" step="any" value="-3">
+        </div>
+        <div>
+          <label class="sr-only" for="d">d (R2,C2)</label>
+          <input id="d" type="number" step="any" value="0">
+        </div>
+      </div>
+      <p class="note">Enter payoffs for the Row player. The Column player seeks to minimize.</p>
+    </section>
+
+    <section class="controls">
+      <button id="solveBtn">Solve game</button>
+      <button id="resetBtn" class="secondary">Reset</button>
+    </section>
+
+    <section id="result" aria-live="polite">
+      <h2>Solution</h2>
+      <div class="cards">
+        <div class="card">
+          <h3>Row optimal strategy</h3>
+          <p id="rowMix">—</p>
+        </div>
+        <div class="card">
+          <h3>Column optimal strategy</h3>
+          <p id="colMix">—</p>
+        </div>
+        <div class="card">
+          <h3>Game value</h3>
+          <p id="gameValue">—</p>
+        </div>
+      </div>
+      <pre id="explanation" class="explanation"></pre>
+    </section>
+  </main>
+
+  <footer>
+    <p>Built with vanilla HTML/CSS/JS. Host anywhere static files are supported.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
