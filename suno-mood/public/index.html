@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Suno Mood Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg: #0b0f17; --card: #121826; --text: #e5e7eb; --muted: #9ca3af; --accent: #6ee7b7; }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: linear-gradient(180deg, #0b0f17 0%, #0f172a 100%);
+      color: var(--text);
+      display: grid; place-items: center;
+    }
+    .container { width: min(1100px, 92vw); margin: 40px auto; }
+    .title { font-size: 2rem; font-weight: 800; letter-spacing: 0.5px; }
+    .subtitle { color: var(--muted); margin-top: 6px; }
+    .panel { background: var(--card); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 18px; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    @media (min-width: 900px) { .grid { grid-template-columns: 1.1fr 0.9fr; } }
+
+    .moods { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 10px; margin-top: 10px; }
+    .mood { padding: 12px; border-radius: 12px; text-align: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.08); background: #0f172a; transition: transform .12s ease, background .2s ease, border-color .2s ease; }
+    .mood:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.18); }
+    .mood.active { outline: 2px solid var(--accent); background: rgba(110,231,183,0.08); }
+
+    .controls { display: flex; gap: 10px; align-items: center; }
+    .controls input { flex: 1; padding: 12px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); background: #0f172a; color: var(--text); }
+    .controls button { padding: 12px 16px; border-radius: 12px; border: none; background: var(--accent); color: #052e2b; font-weight: 700; cursor: pointer; }
+    .log { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 12px; color: var(--muted); height: 140px; overflow: auto; padding: 10px; background: #0b1220; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06); }
+    audio { width: 100%; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="title">Suno Mood Generator</div>
+    <div class="subtitle">Select a mood, optionally refine the prompt, then Generate. Switching moods will crossfade to the new track.</div>
+
+    <div class="grid" style="margin-top: 18px;">
+      <div class="panel">
+        <div style="font-weight:600;margin-bottom:6px;">Moods</div>
+        <div class="moods" id="moods"></div>
+
+        <div style="height:12px"></div>
+        <div class="controls">
+          <input id="prompt" placeholder="Optional: refine prompt (tempo, instruments, vibe)" />
+          <button id="generate">Generate</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+          <div style="font-weight:600">Player</div>
+          <div style="color:var(--muted);font-size:12px;">Crossfade on mood change</div>
+        </div>
+        <div style="height:10px"></div>
+        <audio id="playerA" controls></audio>
+        <div style="height:8px"></div>
+        <audio id="playerB" controls></audio>
+        <div style="height:14px"></div>
+        <div class="log" id="log"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const moods = ['happy','sad','energetic','calm','dark'];
+    const moodsEl = document.getElementById('moods');
+    const promptEl = document.getElementById('prompt');
+    const logEl = document.getElementById('log');
+    const btn = document.getElementById('generate');
+    const playerA = document.getElementById('playerA');
+    const playerB = document.getElementById('playerB');
+
+    let activeMood = 'happy';
+    let activePlayer = 'A';
+    let currentTaskId = null;
+
+    function log(line){
+      const ts = new Date().toLocaleTimeString();
+      logEl.textContent += `\n[${ts}] ${line}`;
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    function renderMoods(){
+      moodsEl.innerHTML = '';
+      moods.forEach(m => {
+        const div = document.createElement('div');
+        div.className = `mood${m===activeMood?' active':''}`;
+        div.textContent = m[0].toUpperCase()+m.slice(1);
+        div.onclick = () => onMoodClick(m);
+        moodsEl.appendChild(div);
+      });
+    }
+
+    async function startGeneration({ mood, prompt }){
+      log(`Starting generation: mood=${mood}${prompt?`, prompt=\"${prompt}\"`:''}`);
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mood, prompt: prompt || undefined })
+      });
+      if (!res.ok) {
+        const txt = await res.text().catch(()=> '');
+        log('Proxy error: ' + (txt || res.status));
+        throw new Error('Failed to start generation');
+      }
+      const data = await res.json();
+      if (!data.taskId) {
+        log('Proxy unexpected response: ' + JSON.stringify(data));
+        throw new Error('Failed to start generation');
+      }
+      return data.taskId;
+    }
+
+    async function pollStatus(taskId, { timeoutMs = 120000, intervalMs = 2500 } = {}){
+      const start = Date.now();
+      while (Date.now() - start < timeoutMs) {
+        const res = await fetch(`/api/status/${encodeURIComponent(taskId)}`);
+        if (!res.ok) throw new Error('Status fetch failed');
+        const data = await res.json();
+        const status = data?.data?.status || data?.status;
+        const audioUrl = data?.data?.audioUrl || data?.audioUrl || data?.data?.url || data?.url;
+        log(`status=${status || 'unknown'}${audioUrl?' (url ready)':''}`);
+        if (audioUrl && (status === 'succeeded' || status === 'completed')) {
+          return audioUrl;
+        }
+        if (status === 'failed' || status === 'error') {
+          throw new Error('Generation failed');
+        }
+        await new Promise(r => setTimeout(r, intervalMs));
+      }
+      throw new Error('Timeout waiting for generation');
+    }
+
+    async function generateAndPlay(mood) {
+      try {
+        btn.disabled = true;
+        const taskId = await startGeneration({ mood, prompt: promptEl.value.trim() });
+        currentTaskId = taskId;
+        const url = await pollStatus(taskId);
+        if (currentTaskId !== taskId) { log('Stale result ignored'); return; }
+        crossfadeTo(url);
+      } catch (e) {
+        console.error(e);
+        log('Error: ' + (e?.message || 'unknown'));
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    async function onMoodClick(mood){
+      if (mood === activeMood) return;
+      activeMood = mood;
+      renderMoods();
+      generateAndPlay(mood);
+    }
+
+    function crossfadeTo(url){
+      const fadeMs = 1800;
+      const fading = activePlayer === 'A' ? playerA : playerB;
+      const starting = activePlayer === 'A' ? playerB : playerA;
+      starting.src = url;
+      starting.volume = 0;
+      starting.play().catch(()=>{});
+
+      const steps = 30;
+      let i = 0;
+      const stepMs = Math.max(16, Math.floor(fadeMs / steps));
+      const fadeInterval = setInterval(() => {
+        i++;
+        const t = Math.min(1, i / steps);
+        starting.volume = t;
+        fading.volume = 1 - t;
+        if (t >= 1) {
+          clearInterval(fadeInterval);
+          fading.pause();
+          fading.currentTime = 0;
+          fading.volume = 1;
+          activePlayer = activePlayer === 'A' ? 'B' : 'A';
+        }
+      }, stepMs);
+    }
+
+    btn.onclick = () => generateAndPlay(activeMood);
+
+    // Initial UI
+    renderMoods();
+    log('Select a mood and press Generate.');
+  </script>
+</body>
+</html>
